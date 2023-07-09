@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.happyballoon.crm.workbench.mapper.ContactsActivityRelationMapper">
+
+    <delete id="deleteContactsRelationByIds2">
+        delete from tbl_contacts_activity_relation where contactsId in
+        <foreach collection="array" item="contactsId" open="(" close=")" separator=",">
+            #{contactsId}
+        </foreach>
+    </delete>
+
+    <select id="selectDelCount2" resultType="int">
+        select count(*) from tbl_contacts_activity_relation where contactsId in
+        <foreach collection="array" item="contactsId" open="(" close=")" separator=",">
+            #{contactsId}
+        </foreach>
+    </select>
+
+
+    <delete id="deleteContactsRelationByIds">
+        delete from tbl_contacts_activity_relation where activityId in
+        <foreach collection="array" item="activityId" open="(" close=")" separator=",">
+            #{activityId}
+        </foreach>
+    </delete>
+
+    <select id="selectDelCount" resultType="int">
+        select count(*) from tbl_contacts_activity_relation where activityId in
+        <foreach collection="array" item="activityId" open="(" close=")" separator=",">
+            #{activityId}
+        </foreach>
+    </select>
+
+    <delete id="deleteRelation">
+        delete from tbl_contacts_activity_relation where contactsId=#{cid} and activityId = #{aid}
+    </delete>
+
+    <select id="selectActivityId" resultType="String">
+        select activityId from tbl_contacts_activity_relation where contactsId=#{contactsId}
+    </select>
+	
+  	<insert id="insertRelation">
+
+        insert into tbl_contacts_activity_relation (
+            id,
+            contactsId,
+            activityId
+        )values (
+            #{id},
+            #{contactsId},
+            #{activityId}
+        )
+
+    </insert>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

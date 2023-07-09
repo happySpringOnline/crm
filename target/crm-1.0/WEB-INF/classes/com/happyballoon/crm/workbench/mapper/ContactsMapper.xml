@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.happyballoon.crm.workbench.mapper.ContactsMapper">
+
+    <select id="selectContactsByCusId" resultType="contacts">
+        select id,fullname,email,mphone from tbl_contacts where customerId=#{customerId}
+    </select>
+
+    <select id="selectContactById2" resultType="contacts">
+        select
+            cont.id,
+            u.name as owner,
+            cont.source,
+            cus.name as customerId,
+            cont.fullname,
+            cont.appellation,
+            cont.email,
+            cont.mphone,
+            cont.job,
+            cont.birth,
+            cont.description,
+            cont.contactSummary,
+            cont.nextContactTime,
+            cont.address,
+            cont.editBy,
+            cont.editTime,
+            cont.createBy,
+            cont.createTime
+        from tbl_contacts cont
+        join tbl_customer cus
+        on cus.id = cont.customerId
+        join tbl_user u
+        on u.id = cont.owner
+        where cont.id=#{id}
+
+    </select>
+
+    <update id="updateContactById">
+        update
+            tbl_contacts
+        set
+            owner = #{owner},
+            source = #{source},
+            customerId = #{customerId},
+            fullname = #{fullname},
+            appellation = #{appellation},
+            email = #{email},
+            mphone = #{mphone},
+            job = #{job},
+            birth = #{birth},
+            editBy = #{editBy},
+            editTime = #{editTime},
+            description = #{description},
+            contactSummary = #{contactSummary},
+            nextContactTime = #{nextContactTime},
+            address = #{address}
+        where
+            id=#{id}
+    </update>
+
+    <delete id="deleteContactsByIds">
+        delete from tbl_contacts where id in
+        <foreach collection="array" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="selectContactById" resultType="contacts">
+        select
+            cont.id,
+            cont.owner,
+            cont.source,
+            cus.name as customerId,
+            cont.fullname,
+            cont.appellation,
+            cont.email,
+            cont.mphone,
+            cont.job,
+            cont.birth,
+            cont.description,
+            cont.contactSummary,
+            cont.nextContactTime,
+            cont.address,
+            cont.editBy,
+            cont.editTime,
+            cont.createBy,
+            cont.createTime
+        from tbl_contacts cont
+        join tbl_customer cus
+        on cus.id = cont.customerId
+        where cont.id=#{id}
+    </select>
+
+    <select id="selectCountByConditions" resultType="int">
+        select count(*)
+        from tbl_contacts cont
+        join tbl_customer cus
+        on cont.customerId = cus.id
+        join tbl_user u
+        on cont.owner = u.id
+        <where>
+            <if test="owner != null and owner != ''">
+                and u.name like "%"#{owner}"%"
+            </if>
+            <if test="fullname != null and fullname != ''">
+                and cont.fullname like "%"#{fullname}"%"
+            </if>
+            <if test="name != null and name != ''">
+                and cus.name like "%"#{name}"%"
+            </if>
+            <if test="source != null and source != ''">
+                and cont.source = #{source}
+            </if>
+            <if test="birth != null and birth != ''">
+                and cont.birth = #{birth}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectContactsByConditions" resultType="contacts">
+        select
+            cont.id,
+            cont.fullname,
+            cus.name as customerId,
+            u.name as owner,
+            cont.source,
+            cont.birth
+        from tbl_contacts cont
+        join tbl_customer cus
+        on cont.customerId = cus.id
+        join tbl_user u
+        on cont.owner = u.id
+        <where>
+            <if test="owner != null and owner != ''">
+                and u.name like "%"#{owner}"%"
+            </if>
+            <if test="fullname != null and fullname != ''">
+                and cont.fullname like "%"#{fullname}"%"
+            </if>
+            <if test="name != null and name != ''">
+                and cus.name like "%"#{name}"%"
+            </if>
+            <if test="source != null and source != ''">
+                and cont.source = #{source}
+            </if>
+            <if test="birth != null and birth != ''">
+                and cont.birth = #{birth}
+            </if>
+        </where>
+        order by cont.editTime desc,cont.createTime desc
+        limit #{startIndex},#{pageSize}
+
+    </select>
+
+    <select id="selectContactsListByCname" resultType="contacts">
+        select id,fullname,email,mphone from tbl_contacts where fullname like "%"#{cname}"%"
+    </select>
+
+    <insert id="insertContact">
+        insert into tbl_contacts
+            (
+                id,
+                owner,
+                source,
+                customerId,
+                fullname,
+                appellation,
+                email,
+                mphone,
+                job,
+                birth,
+                createBy,
+                createTime,
+                editBy,
+                editTime,
+                description,
+                contactSummary,
+                nextContactTime,
+                address
+            )
+        values(
+            #{id},
+            #{owner},
+            #{source},
+            #{customerId},
+            #{fullname},
+            #{appellation},
+            #{email},
+            #{mphone},
+            #{job},
+            #{birth},
+            #{createBy},
+            #{createTime},
+            #{editBy},
+            #{editTime},
+            #{description},
+            #{contactSummary},
+            #{nextContactTime},
+            #{address}
+            )
+
+    </insert>
+  	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

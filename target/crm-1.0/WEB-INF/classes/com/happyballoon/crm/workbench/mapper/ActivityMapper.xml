@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.happyballoon.crm.workbench.mapper.ActivityMapper">
+
+    <select id="selectActivityListByAname3" resultType="activity">
+        select
+            a.id,
+            a.name,
+            a.startDate,
+            a.endDate,
+            u.name as owner
+        from
+            tbl_activity a
+        join tbl_user u
+        on a.owner = u.id
+        where
+            a.name like "%"#{aname}"%" and
+            a.id not in
+        (
+            select activityId from tbl_contacts_activity_relation where contactsId= #{contactsId}
+            )
+    </select>
+
+    <select id="selectActivitiesByContactsId" resultType="activity">
+        select
+            a.id,a.name,u.name as owner,a.startDate,a.endDate
+        from
+            tbl_activity a
+        join
+            tbl_user u
+        on
+            u.id = a.owner
+        where
+            a.id in
+        <foreach collection="list" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </select>
+
+    <select id="selectActivityListAllByAname" resultType="activity">
+        select
+            a.id,
+            a.name,
+            a.startDate,
+            a.endDate,
+            u.name as owner
+        from
+            tbl_activity a
+        join
+            tbl_user u
+        on
+            a.owner = u.id
+        where
+            a.name like "%"#{aname}"%"
+
+    </select>
+
+    <select id="selectActivityListByAname2" resultType="activity">
+        select
+            a.id,
+            a.name,
+            a.startDate,
+            a.endDate,
+            u.name as owner
+        from
+            tbl_activity a
+        join
+            tbl_user u
+        on
+            a.owner = u.id
+        where
+            a.name like "%"#{aname}"%" and
+            a.id in
+            (
+            select activityId from tbl_clue_activity_relation where clueId= #{clueId}
+            )
+    </select>
+
+    <select id="selectActivityListByAname" resultType="activity">
+        select
+            a.id,
+            a.name,
+            a.startDate,
+            a.endDate,
+            u.name as owner
+        from
+            tbl_activity a
+        join tbl_user u
+        on a.owner = u.id
+        where
+            a.name like "%"#{aname}"%" and
+            a.id not in
+        (
+            select activityId from tbl_clue_activity_relation where clueId= #{cid}
+        )
+    </select>
+
+    <select id="selectActivitiesByClueId" resultType="activity">
+        select
+            r.id as id,
+            a.name,
+            a.startDate,
+            a.endDate,
+            u.name as owner
+        from
+            tbl_activity a
+        join
+            tbl_user u
+        on a.owner = u.id
+        join
+            tbl_clue_activity_relation r
+        on a.id = r.activityId
+        where
+            r.clueId = #{id}
+
+    </select>
+
+    <select id="selectActivityById2" resultType="activity">
+        select
+            a.id,
+            u.name as owner,
+            a.name,
+            a.startDate,
+            a.endDate,
+            a.cost,
+            a.description,
+            a.createTime,
+            a.createBy,
+            a.editTime,
+            a.editBy
+        from tbl_activity a
+        join tbl_user u
+        on a.owner = u.id
+        where
+            a.id = #{id}
+
+    </select>
+
+    <update id="updateActivity">
+        update
+            tbl_activity
+        set
+            owner = #{owner},
+            name = #{name},
+            startDate = #{startDate},
+            endDate = #{endDate},
+            cost =#{cost},
+            description = #{description},
+            editBy = #{editBy},
+            editTime = #{editTime}
+        where
+            id = #{id}
+    </update>
+
+    <select id="selectActivityById" resultType="activity">
+        select
+            *
+        from
+            tbl_activity a
+        where
+            a.id = #{activityId}
+    </select>
+
+    <delete id="deleteActivity">
+        delete from tbl_activity where id in
+        <foreach collection="array" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="selectTotalByCondition" resultType="int">
+        select
+            count(*)
+        from
+            tbl_activity a
+        join
+            tbl_user u
+        on
+            a.owner = u.id
+
+        <where>
+            <if test="activityName!=null and activityName!=''">
+                and a.name like "%"#{activityName}"%"
+            </if>
+            <if test="owner!=null and owner!=''">
+                and u.name like "%"#{owner}"%"
+            </if>
+            <if test="startTime!=null and startTime!=''">
+                and a.startDate &gt;= #{startTime}
+            </if>
+            <if test="endTime!=null and endTime!=''">
+                and a.endDate &lt;= #{endTime}
+            </if>
+        </where>
+
+    </select>
+
+    <select id="selectActivitiesByCondition" resultType="Activity">
+        select
+            a.id,
+            u.name as owner,
+            a.name,
+            a.startDate,
+            a.endDate
+        from
+            tbl_activity a
+        join
+            tbl_user u
+        on
+            a.owner = u.id
+
+        <where>
+            <if test="activityName!=null and activityName!=''">
+                and a.name like "%"#{activityName}"%"
+            </if>
+            <if test="owner!=null and owner!=''">
+                and u.name like "%"#{owner}"%"
+            </if>
+            <if test="startTime!=null and startTime!=''">
+                and a.startDate &gt;= #{startTime}
+            </if>
+            <if test="endTime!=null and endTime!=''">
+                and a.endDate &lt;= #{endTime}
+            </if>
+        </where>
+
+        order by
+            a.editTime desc,a.createTime desc
+
+        limit
+            #{startIndex},#{pageSize}
+
+    </select>
+
+    <insert id="saveActivity">
+        insert into tbl_activity (
+            id,
+            owner,
+            name,
+            startDate,
+            endDate,
+            cost,
+            description,
+            createTime,
+            createBy
+        )
+        values (
+           #{id},
+           #{owner},
+           #{name},
+           #{startDate},
+           #{endDate},
+           #{cost},
+           #{description},
+           #{createTime},
+           #{createBy}
+        )
+    </insert>
+</mapper>

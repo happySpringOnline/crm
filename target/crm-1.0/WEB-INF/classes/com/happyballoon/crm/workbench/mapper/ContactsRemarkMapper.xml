@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.happyballoon.crm.workbench.mapper.ContactsRemarkMapper">
+
+    <delete id="deleteRemarkByIds">
+        delete from tbl_contacts_remark where contactsId in
+        <foreach collection="array" item="contactsId" open="(" close=")" separator=",">
+            #{contactsId}
+        </foreach>
+    </delete>
+
+    <select id="selectDelCount" resultType="int">
+        select count(*) from tbl_contacts_remark where contactsId in
+        <foreach collection="array" item="contactsId" open="(" close=")" separator=",">
+            #{contactsId}
+        </foreach>
+    </select>
+
+    <delete id="deleteRemarkById">
+        delete from tbl_contacts_remark
+        where id=#{id}
+    </delete>
+
+    <update id="updateContactRemark">
+        update tbl_contacts_remark
+        set
+            noteContent = #{noteContent},
+            editBy = #{editBy},
+            editTime =#{editTime},
+            editFlag = #{editFlag}
+        where
+            id =#{id}
+    </update>
+
+    <select id="selectContactRemarksByContactId" resultType="contactsRemark">
+        select
+            id,
+            noteContent,
+            createBy,
+            createTime,
+            editBy,
+            editTime,
+            editFlag,
+            contactsId
+        from tbl_contacts_remark
+        where
+            contactsId = #{contactId}
+        order by createTime desc
+    </select>
+
+    <insert id="insertContactsRemark">
+        insert into tbl_contacts_remark(
+            id,
+            noteContent,
+            createBy,
+            createTime,
+            editBy,
+            editTime,
+            editFlag,
+            contactsId
+        )values (
+            #{id},
+            #{noteContent},
+            #{createBy},
+            #{createTime},
+            #{editBy},
+            #{editTime},
+            #{editFlag},
+            #{contactsId}
+        )
+    </insert>
+  	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

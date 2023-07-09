@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://java.sun.com/xml/ns/javaee"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+         id="WebApp_ID" version="2.5">
+
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+  </welcome-file-list>
+
+  <!--
+
+    add/create:跳转到添加页，或者打开添加操作的模态窗口
+    save:执行添加操作
+    edit:跳转到修改页，或者打开修改操作的模态窗口
+    update:执行修改操作
+    get:执行查询操作   find/select/query/...
+    特殊操作 login
+
+  -->
+  <!--字符编码过滤器-->
+  <filter>
+    <filter-name>EncodingFilter</filter-name>
+    <filter-class>com.happyballoon.crm.web.filter.EncodingFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>EncodingFilter</filter-name>
+    <url-pattern>*.do</url-pattern>
+  </filter-mapping>
+
+  <!--判断用户登录过滤器-->
+  <filter>
+    <filter-name>LoginFilter</filter-name>
+    <filter-class>com.happyballoon.crm.web.filter.LoginFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>LoginFilter</filter-name>
+    <url-pattern>*.do</url-pattern>
+    <url-pattern>*.jsp</url-pattern>
+  </filter-mapping>
+
+  <!--全局上下文域-->
+  <listener>
+    <listener-class>com.happyballoon.crm.web.listener.SysInintListener</listener-class>
+  </listener>
+
+  <!--用户登录控制器-->
+  <servlet>
+    <servlet-name>UserController</servlet-name>
+    <servlet-class>com.happyballoon.crm.settings.web.controller.UserController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>UserController</servlet-name>
+    <url-pattern>/settings/user/login.do</url-pattern>
+  </servlet-mapping>
+
+  <!--市场活动控制器-->
+  <servlet>
+    <servlet-name>ActivityController</servlet-name>
+    <servlet-class>com.happyballoon.crm.workbench.web.controller.ActivityController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ActivityController</servlet-name>
+    <url-pattern>/workbench/activity/getUserList.do</url-pattern>
+    <url-pattern>/workbench/activity/saveActivity.do</url-pattern>
+    <url-pattern>/workbench/activity/pageList.do</url-pattern>
+    <url-pattern>/workbench/activity/deleteActivity.do</url-pattern>
+    <url-pattern>/workbench/activity/getUserListAndActivity.do</url-pattern>
+    <url-pattern>/workbench/activity/updateActivity.do</url-pattern>
+    <url-pattern>/workbench/activity/detail.do</url-pattern>
+    <url-pattern>/workbench/activity/showRemarkList.do</url-pattern>
+    <url-pattern>/workbench/activity/deleteRemark.do</url-pattern>
+    <url-pattern>/workbench/activity/saveRemark.do</url-pattern>
+    <url-pattern>/workbench/activity/updateRemark.do</url-pattern>
+  </servlet-mapping>
+
+  <!--线索控制器-->
+  <servlet>
+    <servlet-name>ClueController</servlet-name>
+    <servlet-class>com.happyballoon.crm.workbench.web.controller.ClueController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ClueController</servlet-name>
+    <url-pattern>/workbench/clue/getUserList.do</url-pattern>
+    <url-pattern>/workbench/clue/saveClue.do</url-pattern>
+    <url-pattern>/workbench/clue/pageList.do</url-pattern>
+    <url-pattern>/workbench/clue/detail.do</url-pattern>
+    <url-pattern>/workbench/clue/showActivityListByClueId.do</url-pattern>
+    <url-pattern>/workbench/clue/unbund.do</url-pattern>
+    <url-pattern>/workbench/clue/getActivityListByAname.do</url-pattern>
+    <url-pattern>/workbench/clue/bund.do</url-pattern>
+    <url-pattern>/workbench/clue/getActivityListByAname2.do</url-pattern>
+    <url-pattern>/workbench/clue/convertTran.do</url-pattern>
+    <url-pattern>/workbench/clue/showClueRemarkList.do</url-pattern>
+    <url-pattern>/workbench/clue/addClueRemark.do</url-pattern>
+    <url-pattern>/workbench/clue/deleteClueRemark.do</url-pattern>
+    <url-pattern>/workbench/clue/delete.do</url-pattern>
+    <url-pattern>/workbench/clue/getUserListAndClue.do</url-pattern>
+    <url-pattern>/workbench/clue/update.do</url-pattern>
+  </servlet-mapping>
+
+  <!--客户控制器-->
+  <servlet>
+    <servlet-name>CustomerController</servlet-name>
+    <servlet-class>com.happyballoon.crm.workbench.web.controller.CustomerController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CustomerController</servlet-name>
+    <url-pattern>/workbench/customer/pageList.do</url-pattern>
+    <url-pattern>/workbench/customer/getUserList.do</url-pattern>
+    <url-pattern>/workbench/customer/saveCustomer.do</url-pattern>
+    <url-pattern>/workbench/customer/getCustomerByIdAndUserList.do</url-pattern>
+    <url-pattern>/workbench/customer/updateCustomerById.do</url-pattern>
+    <url-pattern>/workbench/customer/deleteCustomerByIds.do</url-pattern>
+    <url-pattern>/workbench/customer/detail.do</url-pattern>
+    <url-pattern>/workbench/customer/showCustomerRemarks.do</url-pattern>
+    <url-pattern>/workbench/customer/updateRemark.do</url-pattern>
+    <url-pattern>/workbench/customer/saveCustomerRemarks.do</url-pattern>
+    <url-pattern>/workbench/customer/deleteCustomerRemark.do</url-pattern>
+    <url-pattern>/workbench/customer/showContactsListByCusId.do</url-pattern>
+    <url-pattern>/workbench/customer/saveContact.do</url-pattern>
+    <url-pattern>/workbench/customer/showTranListByCusId.do</url-pattern>
+    <url-pattern>/workbench/customer/addTranByCusId.do</url-pattern>
+  </servlet-mapping>
+
+  <!--交易控制器-->
+  <servlet>
+    <servlet-name>TranController</servlet-name>
+    <servlet-class>com.happyballoon.crm.workbench.web.controller.TranController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>TranController</servlet-name>
+    <url-pattern>/workbench/transaction/pageList.do</url-pattern>
+    <url-pattern>/workbench/transaction/open.do</url-pattern>
+    <url-pattern>/workbench/transaction/getCustomerName.do</url-pattern>
+    <url-pattern>/workbench/transaction/getActivityListByAname.do</url-pattern>
+    <url-pattern>/workbench/transaction/getContactsListByCname.do</url-pattern>
+    <url-pattern>/workbench/transaction/saveTransaction.do</url-pattern>
+    <url-pattern>/workbench/transaction/detail.do</url-pattern>
+    <url-pattern>/workbench/transaction/getTranHistoryByTranId.do</url-pattern>
+    <url-pattern>/workbench/transaction/changeStage.do</url-pattern>
+    <url-pattern>/workbench/transaction/getCharts.do</url-pattern>
+    <url-pattern>/workbench/transaction/edit.do</url-pattern>
+    <url-pattern>/workbench/transaction/update.do</url-pattern>
+    <url-pattern>/workbench/transaction/delete.do</url-pattern>
+  </servlet-mapping>
+
+  <!--联系人控制器-->
+  <servlet>
+    <servlet-name>ContactController</servlet-name>
+    <servlet-class>com.happyballoon.crm.workbench.web.controller.ContactController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ContactController</servlet-name>
+    <url-pattern>/workbench/contacts/pageList.do</url-pattern>
+    <url-pattern>/workbench/contacts/getUserList.do</url-pattern>
+    <url-pattern>/workbench/contacts/save.do</url-pattern>
+    <url-pattern>/workbench/contacts/getCustomerName.do</url-pattern>
+    <url-pattern>/workbench/contacts/getContactById.do</url-pattern>
+    <url-pattern>/workbench/contacts/delete.do</url-pattern>
+    <url-pattern>/workbench/contacts/updateContactById.do</url-pattern>
+    <url-pattern>/workbench/contacts/detail.do</url-pattern>
+    <url-pattern>/workbench/contacts/showContactsRemarksById.do</url-pattern>
+    <url-pattern>/workbench/contacts/addRemark.do</url-pattern>
+    <url-pattern>/workbench/contacts/updateRemark.do</url-pattern>
+    <url-pattern>/workbench/contacts/deleteRemark.do</url-pattern>
+    <url-pattern>/workbench/contacts/showTranByContactId.do</url-pattern>
+    <url-pattern>/workbench/contacts/showActivityByContactId.do</url-pattern>
+    <url-pattern>/workbench/contacts/getActivityListByAname.do</url-pattern>
+    <url-pattern>/workbench/contacts/bund.do</url-pattern>
+    <url-pattern>/workbench/contacts/unbund.do</url-pattern>
+    <url-pattern>/workbench/contacts/deleteTran.do</url-pattern>
+    <url-pattern>/workbench/contacts/open.do</url-pattern>
+    <url-pattern>/workbench/contacts/saveTransaction.do</url-pattern>
+
+  </servlet-mapping>
+</web-app>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.happyballoon.crm.workbench.mapper.ClueActivityRelationMapper">
+
+    <delete id="deleteClueRelationByIds2">
+        delete from tbl_clue_activity_relation where clueId in
+        <foreach collection="array" item="clueId" open="(" close=")" separator=",">
+            #{clueId}
+        </foreach>
+    </delete>
+
+    <select id="selectDelCount2" resultType="int">
+        select count(*) from tbl_clue_activity_relation where clueId in
+        <foreach collection="array" item="clueId" open="(" close=")" separator=",">
+            #{clueId}
+        </foreach>
+    </select>
+
+    <delete id="deleteClueRelationByIds">
+        delete from tbl_clue_activity_relation where activityId in
+        <foreach collection="array" item="activityId" open="(" close=")" separator=",">
+            #{activityId}
+        </foreach>
+    </delete>
+
+    <select id="selectDelCount" resultType="int">
+        select count(*) from tbl_clue_activity_relation where activityId in
+        <foreach collection="array" item="activityId" open="(" close=")" separator=",">
+            #{activityId}
+        </foreach>
+    </select>
+
+    <insert id="insertByBund">
+        insert into tbl_clue_activity_relation values(#{id},#{clueId},#{activityId})
+    </insert>
+	
+    <delete id="deleteClueRelationById">
+        delete from tbl_clue_activity_relation where id=#{id}
+    </delete>
+
+    <select id="selectClueActivityRelationList" resultType="clueActivityRelation">
+        select * from tbl_clue_activity_relation where clueId=#{clueId}
+    </select>
+  	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

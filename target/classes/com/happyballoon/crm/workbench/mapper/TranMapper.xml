@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.happyballoon.crm.workbench.mapper.TranMapper">
+
+    <select id="selectTranByCusId" resultType="tran">
+        select * from tbl_tran where customerId = #{customerId}
+    </select>
+
+    <select id="selectTranListByContactsId" resultType="tran">
+        select
+            t.id,cus.name as customerId,t.name,t.money,t.stage,t.expectedDate,t.type
+        from tbl_tran t
+        join tbl_customer cus
+        on t.customerId = cus.id
+        where t.contactsId = #{contactsId}
+    </select>
+
+    <update id="updateTran2">
+        update tbl_tran
+        set
+            owner = #{owner},
+            money = #{money},
+            name = #{name},
+            expectedDate = #{expectedDate},
+            customerId = #{customerId},
+            stage = #{stage},
+            type = #{type},
+            source = #{source},
+            activityId = #{activityId},
+            contactsId = #{contactsId},
+            editBy = #{editBy},
+            editTime = #{editTime},
+            description = #{description},
+            contactSummary = #{contactSummary},
+            nextContactTime = #{nextContactTime}
+        where
+            id=#{id}
+
+    </update>
+
+    <delete id="deleteTransactionByIds">
+        delete from tbl_tran where id in
+        <foreach collection="array" item="id" open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="selectTranToChart" resultType="map">
+        select
+            count(*) as value, stage as name
+        from tbl_tran
+        group by stage
+    </select>
+
+    <select id="selectCount" resultType="int">
+        select count(*) from tbl_tran
+    </select>
+
+    <update id="updateTran">
+        update
+            tbl_tran
+        set
+            stage = #{stage},
+            editBy = #{editBy},
+            editTime = #{editTime}
+        where
+            id=#{id}
+    </update>
+
+    <select id="selectTranById" resultType="tran">
+        select
+            t.id,
+            u.name as owner,
+            t.money,
+            t.name,
+            t.expectedDate,
+            cus.name as customerId,
+            t.stage,
+            t.type,
+            t.source,
+            a.name as activityId,
+            cont.fullname as contactsId,
+            t.createBy,
+            t.createTime,
+            t.editBy,
+            t.editTime,
+            t.description,
+            t.contactSummary,
+            t.nextContactTime
+        from tbl_tran t
+        join tbl_user u
+        on u.id = t.owner
+        join tbl_customer cus
+        on t.customerId = cus.id
+        join tbl_activity a
+        on t.activityId = a.id
+        join tbl_contacts cont
+        on t.contactsId = cont.id
+        where t.id = #{id}
+    </select>
+
+    <select id="selectTranCountByConditions" resultType="int">
+        select
+            count(*)
+        from
+            tbl_tran t
+        join
+            tbl_customer cus
+        on t.customerId = cus.id
+        join
+            tbl_user u
+        on t.owner = u.id
+        join
+            tbl_contacts cont
+        on t.contactsId = cont.id
+        <where>
+            <if test="owner != null and owner!='' ">
+                u.name like "%"#{owner}"%"
+            </if>
+            <if test="name != null and name!='' ">
+                t.name like "%"#{name}"%"
+            </if>
+            <if test="customerName != null and customerName!='' ">
+                cus.name like "%"#{customerName}"%"
+            </if>
+            <if test="stage != null and stage!='' ">
+                t.stage = #{stage}
+            </if>
+            <if test="source!= null and source!='' ">
+                t.source =#{source}
+            </if>
+            <if test="contactsName != null and contactsName!='' ">
+                cont.fullname like "%"#{contactsName}"%"
+            </if>
+        </where>
+    </select>
+
+    <select id="selectTranByConditions" resultType="tran">
+        select
+            t.id,
+            t.name,
+            cus.name as customerId,
+            t.stage,
+            t.type,
+            u.name as owner,
+            t.source,
+            cont.fullname as contactsId
+        from
+            tbl_tran t
+        join
+            tbl_customer cus
+        on t.customerId = cus.id
+        join
+            tbl_user u
+        on t.owner = u.id
+        join
+            tbl_contacts cont
+        on t.contactsId = cont.id
+        <where>
+            <if test="owner != null and owner!='' ">
+                u.name like "%"#{owner}"%"
+            </if>
+            <if test="name != null and name!='' ">
+                t.name like "%"#{name}"%"
+            </if>
+            <if test="customerName != null and customerName!='' ">
+                cus.name like "%"#{customerName}"%"
+            </if>
+            <if test="stage != null and stage!='' ">
+                t.stage = #{stage}
+            </if>
+            <if test="source!= null and source!='' ">
+                t.source =#{source}
+            </if>
+            <if test="contactsName != null and contactsName!='' ">
+                cont.fullname like "%"#{contactsName}"%"
+            </if>
+        </where>
+        order by t.editTime desc,t.createTime desc
+        limit #{startIndex},#{pageSize}
+
+    </select>
+
+    <insert id="insertTran">
+        insert into tbl_tran (
+            id,
+            owner,
+            money,
+            name,
+            expectedDate,
+            customerId,
+            stage,
+            type,
+            source,
+            activityId,
+            contactsId,
+            createBy,
+            createTime,
+            editBy,
+            editTime,
+            description,
+            contactSummary,
+            nextContactTime
+        )
+        values (
+                #{id},
+                #{owner},
+                #{money},
+                #{name},
+                #{expectedDate},
+                #{customerId},
+                #{stage},
+                #{type},
+                #{source},
+                #{activityId},
+                #{contactsId},
+                #{createBy},
+                #{createTime},
+                #{editBy},
+                #{editTime},
+                #{description},
+                #{contactSummary},
+                #{nextContactTime}
+        )
+    </insert>
+  	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
